@@ -1,0 +1,27 @@
+{
+    "user": {
+        "6289677608602@s.whatsapp.net": {
+            "userId": "8e60fc80-b7a1-c3c0-9271-4da9168410f2w",
+            "character_id": "85f3e651-fedf-421d-901e-bc7219a6999d",
+            "conversation": {
+                "id": "gid_071ff055-e25c-4dc6-9c19-7d1f14d6324e",
+                "name": "Neko Arlecchino",
+                "avatar_url": "https://ndsc.b-cdn.net/avatars/b904b21d7f9a12d1a201fbb58a7b6f8c.jpg",
+                "is_nsfw": false,
+                "avatar_is_nsfw": false
+            }
+        },
+        "62895328108012@s.whatsapp.net": {
+            "userId": "013fdadc-704c-6e1a-3099-bba5df12c023w",
+            "character_id": "9c47166d-f1a0-4108-b590-967852979965",
+            "conversation": {
+                "id": "04a54f55-38d2-4780-afd7-8403943a7944",
+                "name": "Irene",
+                "avatar_url": "https://ndsc.b-cdn.net/avatars/3258c1262b92e4ce85459cda7dbb5044.jpg",
+                "is_nsfw": true,
+                "avatar_is_nsfw": false
+            }
+        }
+    },
+    "bearer": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjhhOjE2OjlkOmQ1Ojc2OmFjOjJkOmM2OmIwOjJhOmE2OjAzOmY5OjY5OmMwOmU2IiwidHlwIjoiSldUIn0.eyJhdWQiOltdLCJhenAiOiJjZWMxYjZhOWQzZDQ0YjUwYTdiNDRlN2VlNjJkYmY3ZiIsImV4cCI6MTcyNjk4MzIwMiwiZmVhdHVyZV9mbGFncyI6eyJhZF9zdXBwb3J0ZWRfZXhwZXJpbWVudDIiOnsidCI6ImIiLCJ2Ijp0cnVlfSwiYWRzX29uYm9hcmRfdXNlcnMiOnsidCI6ImkiLCJ2IjowfX0sImlhdCI6MTcyNjg5NjgwMiwiaXNzIjoiaHR0cHM6Ly9nYW1tYS5raW5kZS5jb20iLCJqdGkiOiIxNGQ4YWI2Mi1kYTlmLTRkY2ItYjg3MC1kYjIwZTEyODZhMzEiLCJvcmdfY29kZSI6Im9yZ183ZDhlZmMxMGFiOSIsInBlcm1pc3Npb25zIjpbInNpdGVfYWNjZXNzIiwidmlld19hdXRoIiwidmlld19jaGF0cyIsInZpZXdfaGVscCIsInZpZXdfbXlfY2hhdF9ib3RzIiwicmVwb3J0X2NoYXJhY3RlciIsImNyZWF0ZV9jaGFyYWN0ZXIiLCJkZWxldGVfY2hhcmFjdGVyIl0sInJvbGVzIjpbeyJpZCI6IjAxODg4ZGViLWU0NjEtNWVlOS1jY2U5LTNhMzI4MmU4NjZmOCIsImtleSI6InJlZ3VsYXIiLCJuYW1lIjoiUmVndWxhciBVc2VyIn1dLCJzY3AiOlsib3BlbmlkIiwicHJvZmlsZSIsImVtYWlsIiwib2ZmbGluZSJdLCJzdWIiOiJrcDplZjM1Njg1NDUyNzY0NzVjODY0YjA2YjRkYWQzOTc3OCJ9.a1bps5HmMSfjOimpNdNtYNaNJfhabo_DTjn11eIhHChg8V81rmzwWmslUev74xVcDQdqVxw4dQ3T1QSXIhBfjAc_pvvNteq4RMHZ1putfUSf5sf1OJxSngL_VhW35bEfdxWB_h0T_7KIWv80uS6ll1hZTZ6nOgCPsBiDrRUsCsl35IiOhLyTfTgUKGSmEysgc1zhGBNW3S6kv8YFK5P3X5b7UjTtmQ1-umnCvOB-N08JNmDGn3cOynjwi0ZPYqVvSaFFM7envGpwbFjHaXKAGlEUrrih7FAZf3fFZj7VYydKr0vsD9P8FSvWYC2Tox8UqzCLcbazhpLiHdKOxcneaQ"
+}

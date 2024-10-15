@@ -1,0 +1,35 @@
+import { generateWAMessageFromContent } from '@adiwajshing/baileys'
+let handler = async (m, { conn, text, participants }) => {
+  let users = participants.map(u => conn.decodeJid(u.id))
+  let q = m.quoted ? m.quoted : m
+  let c = m.quoted ? m.quoted : m.msg
+  const msg = conn.cMod(m.chat,
+    generateWAMessageFromContent(m.chat, {
+      [c.toJSON ? q.mtype : 'extendedTextMessage']: c.toJSON ? c.toJSON() : {
+        text: c || ''
+      }
+    }, {
+      quoted: m,
+      userJid: conn.user.id
+    }),
+    text || q.text, conn.user.jid, { mentions: users }
+  )
+  await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
+}
+handler.help = ['hidetag'].map(v => v + ' [teks]')
+handler.tags = ['group', 'adminry']
+handler.command = /^(hidetag|htag|h)$/i
+
+handler.group = true
+handler.admin = true
+handler.owner = false 
+
+export default handler
+
+/*
+SCRIPT BY © VYNAA VALERIE 
+•• recode kasih credits 
+•• contacts: (t.me/VLShop2)
+•• instagram: @vynaa_valerie 
+•• (github.com/VynaaValerie) 
+*/
