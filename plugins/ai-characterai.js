@@ -1,15 +1,20 @@
 import CharacterAI from "../lib/characterAI.js";
 import axios from "axios";
 import * as cheerio from 'cheerio';
+const { 
+    getDevice,
+    proto,
+    generateWAMessageFromContent
+} = (await import('@adiwajshing/baileys')).default
 
 const characterAI = new CharacterAI('./database/characterAI.json');
 
 const handler = async (m, { conn, text, command, isOwner }) => {
-    if (!text) throw `*Contoh:* .cai *[set/search/token]*`;
+    if (!text) throw `*Contoh:* .characterai *[set/search/token]*`;
 
     if (text.startsWith('set')) {
         let id = text.slice(4);
-        if (!id) throw `*Contoh:* .cai xxx-xxxxxx-xxxx\n\nCharacter ID bisa dicari dengan perintah .cai search namaCharacter`;
+        if (!id) throw `*Contoh:* .characterai set xxx-xxxxxx-xxxx\n\nCharacter ID bisa dicari dengan perintah .characterai search namaCharacter`;
         await characterAI.setUser(m.sender, id);
 
         m.reply(`[ ✓ ] Berhasil Mengganti Character ID`);
@@ -19,7 +24,7 @@ const handler = async (m, { conn, text, command, isOwner }) => {
         }
 
         if (!isOwner) throw `Hanya Owner yang bisa mengganti token`;
-        if (!text.slice(7)) throw `*Contoh:* .cai token xxx-xxxxxx-xxxx`;
+        if (!text.slice(6)) throw `*Contoh:* .characterai token xxx-xxxxxx-xxxx`;
 
         characterAI.user_id = null;
         characterAI.userData = {};
@@ -28,13 +33,61 @@ const handler = async (m, { conn, text, command, isOwner }) => {
         m.reply("[ ✓ ] Berhasil Mengganti Token");
     } else if (text.startsWith('search')) {
         let name = text.slice(7);
-        if (!name) throw `*Contoh:* .cai search namaCharacter`;
+        if (!name) throw `*Contoh:* .characterai search namaCharacter`;
 
         await conn.sendMessage(m.chat, { react: { text: `⏱️`, key: m.key }});
 
         const result = await searchCharacter(name);
+        console.log(result[0])
 
         let caption = '*✧ RESULT CHARACTER AI ✧*\n\n'
+
+        let device = getDevice(m.key.id);
+
+        if (device === "android") {
+            const carouselMessage = generateWAMessageFromContent(m.chat, {
+                'viewOnceMessage': {
+                    'message': {
+                        'messageContextInfo': {
+                            'deviceListMetadata': {},
+                            'deviceListMetadataVersion': 2
+                        },
+                        'interactiveMessage': proto.Message.InteractiveMessage.fromObject({
+                            'body': proto.Message.InteractiveMessage.Body.create({
+                                'text': `Pilih Karakter Dari List Dibawah Ini!`
+                            }),
+                            'footer': proto.Message.InteractiveMessage.Footer.create({
+                                'text': '@CharacterAI'
+                            }),
+                            'header': proto.Message.InteractiveMessage.Header.create({
+                                'hasMediaAttachment': false
+                            }),
+                            'nativeFlowMessage': proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+                                buttons: [{
+                                    name: 'single_select',
+                                    buttonParamsJson: JSON.stringify({
+                                        title: 'Character List',
+                                        sections: [{
+                                            title: name,
+                                            rows: result.map((i) => {
+                                                return { title: i.participant__name, description: i.greeting, id: `.${command} set ${i.external_id}` }
+                                            })
+                                    }]
+                                    })
+                                }]
+                            })
+                        })
+                    }
+                }
+            }, {});
+
+            await conn.sendMessage(m.chat, { react: { text: `✅`, key: m.key }});
+
+            await conn.relayMessage(m.chat, carouselMessage.message, {
+                'messageId': carouselMessage.key.id
+            })
+            return
+        }
 
         let num = 0
         caption += result.map((i) => {
@@ -66,10 +119,8 @@ const handler = async (m, { conn, text, command, isOwner }) => {
 handler.before = async (m, { conn }) => {
     if (m.isBaileys && m.fromMe) return;
     if (!m.text) return;
-    if (m.isGroup) return;
-    if (m.sender === 'status@broadcast') return;
     let chatbot = global.db.data.users[m.sender].chatbot;
-    if (!chatbot || chatbot !== 'cai') return;
+    if (!chatbot || chatbot !== 'characterai') return;
 
     if (
         m.text.startsWith(".") ||
@@ -111,8 +162,8 @@ handler.before = async (m, { conn }) => {
     }
 };
 
-handler.help = ['cai set <charID>', 'cai bearer <token>']
-handler.command = ['cai']
+handler.help = ['characterai set <charID>', 'characterai bearer <token>']
+handler.command = ['characterai']
 handler.tags = ['ai'];
 handler.limit = true;
 

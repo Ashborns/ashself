@@ -1,12 +1,13 @@
-if (process.env.NODE_ENV === 'production') {
-    console.log = function () {};
-}
-
 import SpicyAI from "../lib/spicyAI.js";
+const {
+    getDevice,
+    proto,
+    generateWAMessageFromContent
+} = (await import('@adiwajshing/baileys')).default
 
 const spicyAI = new SpicyAI('./database/spicyAI.json');
 
-let handler = async (m, { conn, text, isOwner }) => {
+let handler = async (m, { conn, text, command, isOwner }) => {
     if (!text) throw `*Contoh:* .spicy *[set/search/bearer]*`;
 
     if (text.startsWith('set')) {
@@ -36,6 +37,61 @@ let handler = async (m, { conn, text, isOwner }) => {
         let result = res.results[0].hits
         let caption = '*✧ RESULT SPICY AI ✧*\n\n';
 
+        let device = getDevice(m.key.id);
+
+        if (device === "android") {
+            const carouselMessage = generateWAMessageFromContent(m.chat, {
+                'viewOnceMessage': {
+                    'message': {
+                        'messageContextInfo': {
+                            'deviceListMetadata': {},
+                            'deviceListMetadataVersion': 2
+                        },
+                        'interactiveMessage': proto.Message.InteractiveMessage.fromObject({
+                            'body': proto.Message.InteractiveMessage.Body.create({
+                                'text': `Pilih Karakter Dari List Dibawah Ini!`
+                            }),
+                            'footer': proto.Message.InteractiveMessage.Footer.create({
+                                'text': '@SpicyAI'
+                            }),
+                            'header': proto.Message.InteractiveMessage.Header.create({
+                                'hasMediaAttachment': false
+                            }),
+                            'nativeFlowMessage': proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+                                buttons: [{
+                                    name: 'single_select',
+                                    buttonParamsJson: JSON.stringify({
+                                        title: 'Character List',
+                                        sections: [{
+                                            title: name,
+                                            rows: result.map((i) => {
+                                                let doc = i.document;
+                                                return {
+                                                    title: `${doc.name} (NSFW: ${doc.is_nsfw ? 'Yes' : 'No'})`, // Menambahkan informasi NSFW di title
+                                                    description: doc.title, // Menggunakan judul karakter saja di deskripsi
+                                                    id: `.${command} set ${doc.character_id}` // Menggunakan character_id yang benar
+                                                };
+                                            })
+
+
+                                        }]
+                                    })
+                                }]
+                            })
+                        })
+                    }
+                }
+            }, {});
+
+            await conn.sendMessage(m.chat, { react: { text: `✅`, key: m.key } });
+
+            await conn.relayMessage(m.chat, carouselMessage.message, {
+                'messageId': carouselMessage.key.id
+            })
+            return
+        }
+
+
         for (let i = 0; i < result.length; i++) {
             if (i >= 10) break;
             let doc = result[i].document
@@ -45,7 +101,7 @@ let handler = async (m, { conn, text, isOwner }) => {
             caption += `> ID : ${doc.character_id}\n\n`;
             caption += `──────────────────\n\n`;
         }
-        
+
         m.reply(caption);
     }
 };
@@ -69,7 +125,7 @@ handler.before = async (m, { conn }) => {
     if (m.message.reactionMessage) return
 
     try {
-        await conn.sendMessage(m.chat, { react: { text: `⏱️`, key: m.key }});
+        await conn.sendMessage(m.chat, { react: { text: `⏱️`, key: m.key } });
 
         const type = m.text === "--auto" ? 'autopilot' : m.text === "--continue" ? 'continue_chat' : 'message';
         let res = await spicyAI.ask(m.sender, null, m.text, type);
@@ -80,7 +136,7 @@ handler.before = async (m, { conn }) => {
             caption = res.response.message.content;
         }
 
-        await conn.sendMessage(m.chat, { react: { text: `✅`, key: m.key }});
+        await conn.sendMessage(m.chat, { react: { text: `✅`, key: m.key } });
 
         conn.sendMessage(m.chat, {
             text: caption,

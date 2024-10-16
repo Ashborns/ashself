@@ -1,4 +1,4 @@
-const chatbotList = ['rolegpt', 'cai', 'spicyai', 'morph', 'roleplai', 'off']
+const chatbotList = ['rolegpt', 'characterai', 'spicyai', 'morph', 'roleplai', 'off']
 
 let handler = async (m, { conn, text }) => {
     if (!text) {
