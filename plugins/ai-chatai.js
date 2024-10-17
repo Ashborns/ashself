@@ -15,9 +15,9 @@ let handler = async (m, { conn, text }) => {
     }
 };
 
-handler.command = ['chatai'];
+handler.command = ['chatai2'];
 handler.tags = ["ai"];
-handler.help = ['chatai'];
+handler.help = ['chatai2'];
 handler.vip = true
 
 export default handler;
